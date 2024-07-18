@@ -1,14 +1,10 @@
 import mongoose from "mongoose";
 
-interface SensorLoggerInput {
+export interface SensorMeasurement{
     equipmentId: string
-    timestamp: string
     value: number
-}
+    timestamp: string
 
-interface SensorMeasurement {
-    timestamp: string
-    value: number
 }
 
 interface SensorLogger{
