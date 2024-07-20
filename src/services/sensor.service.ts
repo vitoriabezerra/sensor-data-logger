@@ -50,11 +50,12 @@ export const getSensorLogFromDate = async (equipmentId: string, date: string) =>
             }
         ]);
 
-        return response.length > 0 ? response[0].measurements : [];
+        return response.length ? response[0].measurements : [];
     } catch (error) {
         throw new Error("Error while trying to get sensor log");
     }
 };
+
 
 
 

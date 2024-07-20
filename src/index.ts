@@ -2,17 +2,15 @@ import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import sensorRoutes from "./routes/sensor.routes";
+import multer from "multer";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT;
 const uri = process.env.MONGO_URI as string;
+const upload = multer({ dest: 'uploads/' });
 
 app.use(express.json());
-
-app.get("/", (req: Request, res: Response) => {
-    res.send("SignIn and SignUp application");
-});
 
 app.use("", sensorRoutes);
 

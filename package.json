@@ -12,13 +12,16 @@
   "author": "Vitória Bezerra",
   "license": "ISC",
   "dependencies": {
+    "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.5.1"
+    "mongoose": "^8.5.1",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.11",
     "@types/node": "^20.14.11",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
