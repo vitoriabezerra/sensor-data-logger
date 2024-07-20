@@ -6,7 +6,7 @@ const router = Router();
 const upload = multer({ dest: 'uploads/' });
 
 router.post("/create-log", sensorController.createNewLog);
-router.get("/logs/:id/:date", sensorController.getSensorLogFromDate);
+router.get("/logs/:date/:id?", sensorController.getSensorLogFromDate);
 router.post('/upload-csv', upload.single('file'), sensorController.uploadCSV);
 
 export default router;
