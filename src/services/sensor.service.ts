@@ -24,7 +24,7 @@ export const createSensorLog = async (log: SensorMeasurement) => {
 
 export const getSensorLogByIdAndDate = async (equipmentId: string, date: string) => {
     try {
-        const endDate = new Date().toISOString(); // Data atual
+        const endDate = new Date().toISOString();
 
         const response = await SensorLogger.aggregate([
             { $match: { equipmentId: equipmentId } },
@@ -55,10 +55,9 @@ export const getSensorLogByIdAndDate = async (equipmentId: string, date: string)
     }
 };
 
-export const getSensorLogsByDate = async (date: string) => {
+export const getSensorLogsByDate = async (date: string): Promise<SensorLogger[]> => {
     try {
-        const startDate = new Date(date);
-        const endDate = new Date().toISOString(); // Data atual
+        const endDate = new Date().toISOString();
 
         const response = await SensorLogger.aggregate([
             {
@@ -69,7 +68,7 @@ export const getSensorLogsByDate = async (date: string) => {
                             as: "measurement",
                             cond: {
                                 $and: [
-                                    { $gte: ["$$measurement.timestamp", startDate] },
+                                    { $gte: ["$$measurement.timestamp", date] },
                                     { $lte: ["$$measurement.timestamp", endDate] }
                                 ]
                             }
@@ -81,7 +80,12 @@ export const getSensorLogsByDate = async (date: string) => {
             }
         ]);
 
-        return response;
+        const sensorLogs: SensorLogger[] = response.map((item: any) => ({
+            equipmentId: item.equipmentId,
+            measurements: item.measurements
+        }));
+
+        return sensorLogs;
     } catch (error) {
         throw new Error("Error while trying to get sensor logs by date");
     }
