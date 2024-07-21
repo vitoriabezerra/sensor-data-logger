@@ -8,7 +8,6 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 const uri = process.env.MONGO_URI as string;
-const upload = multer({ dest: 'uploads/' });
 
 app.use(express.json());
 
