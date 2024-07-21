@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import sensorRoutes from "./routes/sensor.routes";
-import multer from "multer";
 
 dotenv.config();
 const app = express();

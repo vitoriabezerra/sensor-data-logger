@@ -1,5 +1,5 @@
 {
-  "name": "sensor-data-logger",
+  "name": "sensor-data-logger-backend",
   "version": "1.0.0",
   "description": "A Node.js application for logging and retrieving sensor data with precise timestamps.",
   "main": "index.js",
