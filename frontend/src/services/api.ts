@@ -1,4 +1,4 @@
-import { SensorLogger } from "../models/sensor.model";
+import { SensorLogger, SensorMeasurement } from "../models/sensor.model";
 
 const API_URL = 'http://localhost:4000';
 
@@ -15,4 +15,21 @@ export const getAverageSensorData = async (date:string) => {
     const response = await fetch(`${API_URL}/average-logs/${date}`);
     const data = await response.json();
     return data;
+};
+
+export const createNewLog = async (data: SensorMeasurement) => {
+    const response = await fetch(`${API_URL}/create-log`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to create new log');
+    }
+
+    const responseData = await response.json();
+    return responseData;
 };

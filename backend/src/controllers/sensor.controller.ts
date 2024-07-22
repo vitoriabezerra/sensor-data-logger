@@ -12,7 +12,6 @@ export const getSensorLogFromDate = async (req: Request, res: Response) => {
         if (!date) {
             return res.status(400).send('Date is required.');
         }
-        console.log(date, id);
 
         let sensorLogs;
         if (id) {

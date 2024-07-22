@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import { getSensorData } from '../services/api';
 import { SensorLogger } from '../models/sensor.model';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Grid } from '@mui/material';
 
 // Register the components
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -59,15 +60,16 @@ const SensorChart: React.FC<SensorChartProps> = ({ date }) => {
         scales: {
             y: {
                 beginAtZero: true,
+
+                            
             },
         },
     };
 
     return (
-        <div>
-            <h2>Average Sensor Data</h2>
+        <Grid style={{padding: 40}}>
             {chartData && <Bar data={chartData} options={options} />}
-        </div>
+        </Grid>
     );
 };
 
