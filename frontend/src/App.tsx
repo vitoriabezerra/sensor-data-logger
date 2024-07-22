@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './App.css';
 import SensorChart from './components/sensorChart';
@@ -8,6 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { Moment } from 'moment';
+import moment from 'moment';
 
 
 const App: React.FC = () => {
@@ -15,11 +16,37 @@ const App: React.FC = () => {
     const [id, setId] = useState('');
     const [interval, setInterval] = useState('24hours');
     const [showAverage, setShowAverage] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [dateToSearch, setDateToSearch] = useState<string | null>(null);
   
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       setShowAverage(true);
     };
+
+    useEffect(() => {
+        setIsLoading(true)
+        const dateToSearch = getDate(interval);
+        console.log(dateToSearch)
+        setDateToSearch(dateToSearch);
+    }, [interval]);
+
+
+    const getDate = (interval: string): string => {
+        const now = moment();
+        switch (interval) {
+          case '2days':
+            return now.subtract(2, 'days').toISOString();
+          case '1week':
+            return now.subtract(1, 'week').toISOString();
+          case '1month':
+            return now.subtract(1, 'month').toISOString();
+        case '24hours':
+        default:
+            return now.subtract(1, 'days').toISOString();
+        }
+      };
+
   
     return (
       <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -49,17 +76,7 @@ const App: React.FC = () => {
                 <Grid item>
                   <FormControl variant="outlined" sx={{ minWidth: 120 }}>
                     <InputLabel id="interval-label">Interval</InputLabel>
-                    <Select
-                      labelId="interval-label"
-                      id="interval"
-                      value={interval}
-                      onChange={(e) => setInterval(e.target.value)}
-                      label="Interval"
-                    >
-                      <MenuItem value="24hours">24 Hours</MenuItem>
-                      <MenuItem value="2days">2 Days</MenuItem>
-                      <MenuItem value="1week">1 Week</MenuItem>
-                    </Select>
+                   
                   </FormControl>
                 </Grid>
                 <Grid item>
@@ -71,15 +88,25 @@ const App: React.FC = () => {
             </form>
           </Grid>
           <Grid item container spacing={4}>
-            {date && id ? (
+            <Grid item>
+            <Select
+                        labelId="interval-label"
+                        id="interval"
+                        value={interval}
+                        onChange={(e) => setInterval(e.target.value)}
+                        label="Interval"
+                        >
+                        <MenuItem value="24hours">24 Hours</MenuItem>
+                        <MenuItem value="2days">2 Days</MenuItem>
+                        <MenuItem value="1week">1 Week</MenuItem>
+                        <MenuItem value="1week">1 Month</MenuItem>
+                        </Select>
+            </Grid>
+            {dateToSearch && (
               <Grid item xs={12}>
-                <SensorChart date={date} id={id} />
+                <SensorChart date={dateToSearch} />
               </Grid>
-            ) : (
-              <Grid item xs={12}>
-                {showAverage && <AverageChart date={date || ''} />}
-              </Grid>
-            )}
+            )} 
           </Grid>
         </Grid>
       </LocalizationProvider>

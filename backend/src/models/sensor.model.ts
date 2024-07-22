@@ -10,6 +10,7 @@ export interface SensorMeasurement{
 interface SensorLogger{
     equipmentId: string
     measurements: SensorMeasurement[]
+    averageValue?: number
 
 }
 

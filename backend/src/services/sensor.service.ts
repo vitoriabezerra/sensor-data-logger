@@ -22,7 +22,8 @@ export const createSensorLog = async (log: SensorMeasurement) => {
     }
 };
 
-export const getSensorLogByIdAndDate = async (equipmentId: string, date: string) => {
+
+export const getSensorLogByIdAndDate = async (equipmentId: string, date: string): Promise<SensorLogger> => {
     try {
         const endDate = new Date().toISOString();
 
@@ -42,18 +43,20 @@ export const getSensorLogByIdAndDate = async (equipmentId: string, date: string)
                             }
                         }
                     },
+                    averageValue: { $avg: "$measurements.value" },
                     _id: 0
                 }
             }
         ]);
 
         return response.length > 0 
-            ? { equipmentId, measurements: response[0].measurements }
-            : { equipmentId, measurements: [] };
+            ? { equipmentId, measurements: response[0].measurements, averageValue: response[0].measurements.length > 0 ? response[0].averageValue : 0 }
+            : { equipmentId, measurements: [], averageValue: 0 };
     } catch (error) {
         throw new Error("Error while trying to get sensor log by ID and date");
     }
 };
+
 
 export const getSensorLogsByDate = async (date: string): Promise<SensorLogger[]> => {
     try {
@@ -74,15 +77,17 @@ export const getSensorLogsByDate = async (date: string): Promise<SensorLogger[]>
                             }
                         }
                     },
-                    _id: 0,
-                    equipmentId: 1
+                    averageValue: { $avg: "$measurements.value" },
+                    equipmentId: 1,
+                    _id: 0
                 }
             }
         ]);
 
         const sensorLogs: SensorLogger[] = response.map((item: any) => ({
             equipmentId: item.equipmentId,
-            measurements: item.measurements
+            measurements: item.measurements,
+            averageValue: item.measurements.length > 0 ? item.averageValue : 0
         }));
 
         return sensorLogs;
