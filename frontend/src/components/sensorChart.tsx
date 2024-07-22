@@ -27,9 +27,10 @@ interface ChartData {
 interface SensorChartProps {
     date: string;
     id?: string;
+    refreshChart: boolean;
 }
 
-const SensorChart: React.FC<SensorChartProps> = ({ date }) => {
+const SensorChart: React.FC<SensorChartProps> = ({ date, refreshChart }) => {
     const [chartData, setChartData] = useState<ChartData | undefined>(undefined);
 
     useEffect(() => {
@@ -54,7 +55,7 @@ const SensorChart: React.FC<SensorChartProps> = ({ date }) => {
         };
 
         fetchData();
-    }, [date]);
+    }, [date, refreshChart]);
 
     const options = {
         scales: {

@@ -18,19 +18,17 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/L
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Moment } from "moment";
 import moment from "moment";
+import SensorModal from "./components/sensorModal";
 
 const App: React.FC = () => {
   const [date, setDate] = useState<Moment | null | undefined>(null);
   const [id, setId] = useState("");
   const [interval, setInterval] = useState("24hours");
-  const [showAverage, setShowAverage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dateToSearch, setDateToSearch] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [refreshChart, setRefreshChart] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setShowAverage(true);
-  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,6 +52,13 @@ const App: React.FC = () => {
     }
   };
 
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => {setShowModal(false)};
+
+  const handleRefresh = () => {
+    setRefreshChart(!refreshChart);
+};
+
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <Grid
@@ -64,64 +69,40 @@ const App: React.FC = () => {
         spacing={4}
         style={{ padding: 40 }}
       >
-        {/* <Grid item>
-          <h1>Sensor Dashboard</h1>
-        </Grid>
-        <Grid item>
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item>
-                <TextField
-                  id="equipment-id"
-                  label="Equipment ID"
-                  variant="outlined"
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <DatePicker
-                  label="Select Date"
-                  value={date}
-                  onChange={(newValue) => setDate(newValue)}
-                />
-              </Grid>
-
-              <Grid item>
-                <Button type="submit" variant="contained" color="primary">
-                  Buscar
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Grid> */}
-
-          <Typography variant="h2">Average Sensor Data</Typography>
+        <Typography variant="h2">Average Sensor Data</Typography>
 
         <Grid item container spacing={4}>
-          <Grid item xs={12}>
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel id="interval-label">Interval</InputLabel>
-              <Select
-                labelId="interval-label"
-                id="interval"
-                value={interval}
-                onChange={(e) => setInterval(e.target.value)}
-                label="Interval"
-              >
-                <MenuItem value="24hours">24 Hours</MenuItem>
-                <MenuItem value="2days">2 Days</MenuItem>
-                <MenuItem value="1week">1 Week</MenuItem>
-                <MenuItem value="1month">1 Month</MenuItem>
-              </Select>
-            </FormControl>
+          <Grid item container justifyContent="center" flexDirection="row" spacing={4} alignItems="center">
+            <Grid item>
+              <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+                <InputLabel id="interval-label">Interval</InputLabel>
+                <Select
+                  labelId="interval-label"
+                  id="interval"
+                  value={interval}
+                  onChange={(e) => setInterval(e.target.value)}
+                  label="Interval"
+                >
+                  <MenuItem value="24hours">24 Hours</MenuItem>
+                  <MenuItem value="2days">2 Days</MenuItem>
+                  <MenuItem value="1week">1 Week</MenuItem>
+                  <MenuItem value="1month">1 Month</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" onClick={handleOpenModal}>
+                + Add Sensor Value
+              </Button>
+            </Grid>
           </Grid>
           {dateToSearch && (
             <Grid item xs={12}>
-              <SensorChart date={dateToSearch} />
+              <SensorChart date={dateToSearch} refreshChart={refreshChart} />
             </Grid>
           )}
         </Grid>
+        <SensorModal open={showModal} handleClose={handleCloseModal} onRefresh={handleRefresh}  />
       </Grid>
     </LocalizationProvider>
   );

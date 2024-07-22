@@ -6,9 +6,10 @@ import { SensorMeasurement } from "../models/sensor.model";
 interface SensorModalProps {
   open: boolean;
   handleClose: () => void;
+  onRefresh: () => void;
 }
 
-const SensorModal: React.FC<SensorModalProps> = ({ open, handleClose }) => {
+const SensorModal: React.FC<SensorModalProps> = ({ open, handleClose, onRefresh }) => {
   const [equipmentId, setEquipmentId] = useState("");
   const [value, setValue] = useState("");
 
@@ -22,6 +23,7 @@ const SensorModal: React.FC<SensorModalProps> = ({ open, handleClose }) => {
     try {
       await createNewLog(sensorData);
       handleClose();
+      onRefresh();
     } catch (error) {
       console.error("Error creating sensor log", error);
     }
@@ -60,7 +62,7 @@ const SensorModal: React.FC<SensorModalProps> = ({ open, handleClose }) => {
           onChange={(e) => setValue(e.target.value)}
         />
         <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Enviar
+          Send
         </Button>
       </Box>
     </Modal>
