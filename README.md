@@ -50,7 +50,7 @@ Este projeto foi desenvolvido para uma empresa do setor de óleo e gás com o ob
    npm install
    ```
 
-4. Configure as variáveis de ambiente necessárias (exemplo para MongoDB). **Observação: o arquivo .env será enviado junto com o projeto pela autora do projeto para facilitar.**
+4. Configure as variáveis de ambiente necessárias (exemplo para MongoDB).
 
    ```bash
    // backend/.env
@@ -121,12 +121,5 @@ Para executar os testes, navegue até o diretório do backend e execute:
 
 ```bash
 npm test
+``
 ```
-
-## Contribuição
-
-Sinta-se à vontade para contribuir com este projeto. Abra uma issue ou envie um pull request.
-
-## Licença
-
-Este projeto é licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
