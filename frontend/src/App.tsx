@@ -21,8 +21,6 @@ import moment from "moment";
 import SensorModal from "./components/sensorModal";
 
 const App: React.FC = () => {
-  const [date, setDate] = useState<Moment | null | undefined>(null);
-  const [id, setId] = useState("");
   const [interval, setInterval] = useState("24hours");
   const [isLoading, setIsLoading] = useState(false);
   const [dateToSearch, setDateToSearch] = useState<string | null>(null);
