@@ -31,7 +31,7 @@ export const getSensorLogByIdAndDate = async (equipmentId: string, date: string)
             { $match: { equipmentId: equipmentId } },
             {
                 $project: {
-                    measurements: {
+                    filteredMeasurements: {
                         $filter: {
                             input: "$measurements",
                             as: "measurement",
@@ -43,8 +43,15 @@ export const getSensorLogByIdAndDate = async (equipmentId: string, date: string)
                             }
                         }
                     },
-                    averageValue: { $avg: "$measurements.value" },
+                    equipmentId: 1,
                     _id: 0
+                }
+            },
+            {
+                $project: {
+                    equipmentId: 1,
+                    measurements: "$filteredMeasurements",
+                    averageValue: { $avg: "$filteredMeasurements.value" }
                 }
             }
         ]);
@@ -65,7 +72,7 @@ export const getSensorLogsByDate = async (date: string): Promise<SensorLogger[]>
         const response = await SensorLogger.aggregate([
             {
                 $project: {
-                    measurements: {
+                    filteredMeasurements: {
                         $filter: {
                             input: "$measurements",
                             as: "measurement",
@@ -77,9 +84,15 @@ export const getSensorLogsByDate = async (date: string): Promise<SensorLogger[]>
                             }
                         }
                     },
-                    averageValue: { $avg: "$measurements.value" },
                     equipmentId: 1,
                     _id: 0
+                }
+            },
+            {
+                $project: {
+                    equipmentId: 1,
+                    measurements: "$filteredMeasurements",
+                    averageValue: { $avg: "$filteredMeasurements.value" }
                 }
             }
         ]);
