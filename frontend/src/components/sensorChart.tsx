@@ -38,7 +38,7 @@ const SensorChart: React.FC<SensorChartProps> = ({ date, refreshChart }) => {
             const sensorData: SensorLogger[] = await getSensorData(date);
             
             const labels = sensorData.map(sensorLog => sensorLog.equipmentId);
-            const averageValues = sensorData.map(sensorLog => sensorLog.averageValue);
+            const averageValues = sensorData.map(sensorLog => Number(sensorLog.averageValue.toFixed(2)));
 
             setChartData({
                 labels: labels,
