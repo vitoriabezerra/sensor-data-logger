@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import "./App.css";
 import SensorChart from "./components/sensorChart";
@@ -19,17 +19,17 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Moment } from "moment";
 import moment from "moment";
 import SensorModal from "./components/sensorModal";
+import { uploadCSV } from "./services/api";
 
 const App: React.FC = () => {
   const [interval, setInterval] = useState("24hours");
-  const [isLoading, setIsLoading] = useState(false);
   const [dateToSearch, setDateToSearch] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [refreshChart, setRefreshChart] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
 
   useEffect(() => {
-    setIsLoading(true);
     const dateToSearch = getDate(interval);
     setDateToSearch(dateToSearch.format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
   }, [interval]);
@@ -55,6 +55,25 @@ const App: React.FC = () => {
 
   const handleRefresh = () => {
     setRefreshChart(!refreshChart);
+};
+
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (e.target.files && e.target.files.length > 0) {
+    const file = e.target.files[0];
+
+    try {
+      await uploadCSV(file)
+      handleRefresh();
+    } catch (error) {
+      console.error('Error uploading file', error);
+    }
+  }
+};
+
+const handleUploadClick = () => {
+  if (fileInputRef.current) {
+    fileInputRef.current.click();
+  }
 };
 
   return (
@@ -93,6 +112,19 @@ const App: React.FC = () => {
                 + Add Sensor Value
               </Button>
             </Grid>
+
+          <Grid item>
+          <Button variant="contained" color="primary" onClick={handleUploadClick}>
+            Upload CSV
+          </Button>
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
+          </Grid>
           </Grid>
           {dateToSearch && (
             <Grid item xs={12}>

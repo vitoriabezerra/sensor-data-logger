@@ -33,3 +33,24 @@ export const createNewLog = async (data: SensorMeasurement) => {
     const responseData = await response.json();
     return responseData;
 };
+
+export const uploadCSV = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await fetch(`${API_URL}/upload-csv`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to upload file');
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error uploading file', error);
+        return false;
+}  
+}
