@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { getSensorData } from '../services/api';
-import { Moment } from 'moment';
 import { SensorLogger } from '../models/sensor.model';
+import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
+// Register the components
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface SensorLog {
     timestamp: string;
@@ -26,38 +28,45 @@ interface SensorChartProps {
     id?: string;
 }
 
-const SensorChart: React.FC<SensorChartProps> = ({ date, id }) => {
+const SensorChart: React.FC<SensorChartProps> = ({ date }) => {
     const [chartData, setChartData] = useState<ChartData | undefined>(undefined);
 
     useEffect(() => {
-        console.log('entrou aqui', date);
         const fetchData = async () => {
             const sensorData: SensorLogger[] = await getSensorData(date);
-            console.log(sensorData);
-            // const labels = sensorData.map(log => log.timestamp);
-            // const data = sensorData.map(log => log.value);
+            
+            const labels = sensorData.map(sensorLog => sensorLog.equipmentId);
+            const averageValues = sensorData.map(sensorLog => sensorLog.averageValue);
 
-            // setChartData({
-            //     labels: labels,
-            //     datasets: [
-            //         {
-            //             label: 'Sensor Values',
-            //             data: data,
-            //             borderColor: 'rgba(75, 192, 192, 1)',
-            //             backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            //             fill: true,
-            //         },
-            //     ],
-            // });
+            setChartData({
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Average Sensor Values',
+                        data: averageValues,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: true,
+                    },
+                ],
+            });
         };
 
         fetchData();
-    }, [date, id]);
+    }, [date]);
+
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
 
     return (
         <div>
-            <h2>Sensor Data</h2>
-            {chartData && <Line data={chartData} />}
+            <h2>Average Sensor Data</h2>
+            {chartData && <Bar data={chartData} options={options} />}
         </div>
     );
 };

@@ -6,7 +6,7 @@ export interface SensorMeasurement{
 }
 
 export interface SensorLogger{
-    equipmentId: string
-    measurements: SensorMeasurement[]
-
+    equipmentId: string,
+    measurements: SensorMeasurement[],
+    averageValue: number,
 }
