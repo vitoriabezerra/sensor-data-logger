@@ -33,7 +33,7 @@ describe('Sensor Service', () => {
       mockSensorLogger.findOneAndUpdate.mockResolvedValue({
         equipmentId: 'EQ-123',
         measurements: [{ timestamp: log.timestamp, value: log.value }],
-      } as any); // O "as any" é usado para suprimir erros de tipo
+      } as any);
 
       const result = await createSensorLog(log);
 
@@ -109,7 +109,7 @@ describe('Sensor Service', () => {
         value: 36.7,
       };
 
-      const date = new Date(Date.now() - 86400000).toISOString(); // 24 hours ago
+      const date = moment().subtract(1, "days").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 
       mockSensorLogger.aggregate.mockResolvedValue([
         {
@@ -141,7 +141,7 @@ describe('Sensor Service', () => {
     });
 
     it('should return empty array if no logs found', async () => {
-      const date = new Date(Date.now() - 86400000).toISOString(); // 24 hours ago
+      const date = moment().subtract(1, "days").format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 
       mockSensorLogger.aggregate.mockResolvedValue([]);
 
