@@ -73,12 +73,7 @@ const App: React.FC = () => {
                     onChange={(newValue) => setDate(newValue)}
                   />
                 </Grid>
-                <Grid item>
-                  <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-                    <InputLabel id="interval-label">Interval</InputLabel>
-                   
-                  </FormControl>
-                </Grid>
+               
                 <Grid item>
                   <Button type="submit" variant="contained" color="primary">
                     Buscar
@@ -88,8 +83,10 @@ const App: React.FC = () => {
             </form>
           </Grid>
           <Grid item container spacing={4}>
-            <Grid item>
-            <Select
+          <Grid item>
+                  <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+                    <InputLabel id="interval-label">Interval</InputLabel>
+                    <Select
                         labelId="interval-label"
                         id="interval"
                         value={interval}
@@ -101,7 +98,8 @@ const App: React.FC = () => {
                         <MenuItem value="1week">1 Week</MenuItem>
                         <MenuItem value="1week">1 Month</MenuItem>
                         </Select>
-            </Grid>
+                  </FormControl>
+                </Grid>
             {dateToSearch && (
               <Grid item xs={12}>
                 <SensorChart date={dateToSearch} />

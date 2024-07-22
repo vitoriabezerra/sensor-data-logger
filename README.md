@@ -84,10 +84,10 @@ Este projeto foi desenvolvido para uma empresa do setor de óleo e gás com o ob
 
 ## Endpoints da API
 
-### Receber Dados em Tempo Real
+### Criar Novo Log de Sensor
 
 ```http
-POST /api/sensors/data
+POST /api/sensors/create-log
 ```
 
 - Payload:
@@ -99,10 +99,20 @@ POST /api/sensors/data
   }
   ```
 
+### Obter Logs de Sensor por Data
+
+```http
+GET /api/sensors/logs/:date/:id?
+```
+
+- Parâmetros:
+  - `date`: Data específica para obter os logs.
+  - `id` (opcional): Identificador do equipamento.
+
 ### Upload de Arquivo CSV
 
 ```http
-POST /api/sensors/upload
+POST /api/sensors/upload-csv
 ```
 
 - Formato do CSV:
